@@ -1,3 +1,5 @@
+local loadedPings = require "loadedpings"
+
 function loadedPings.squeak()
     sounds:playSound("minecraft:entity.bat.hurt", player:getPos())
 end

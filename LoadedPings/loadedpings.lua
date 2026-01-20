@@ -15,4 +15,4 @@ setmetatable(loadedPings, {
     end
 })
 
-rawset(_G, "loadedPings", loadedPings)
+return loadedPings
