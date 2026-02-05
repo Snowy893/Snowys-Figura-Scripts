@@ -1,28 +1,30 @@
 ---@class SyncedPings
 local SyncedPings = {}
----@type SyncedPings[]
-SyncedPings.ALL = {}
 SyncedPings.ticks = 200
 
----@param pingFunc function
----@param ... any
----@return function
-function SyncedPings:new(pingFunc, ...)
+---@generic T
+---@param pingFunc fun(...: T?)
+---@param eventType "TICK"|"WORLD_TICK"
+---@param ... T?
+---@return fun(...: T?)
+function SyncedPings:new(pingFunc, eventType, ...)
     self.pingFunc = pingFunc
     self.args = ...
-    table.insert(SyncedPings.ALL, self)
+    if not SyncedPings[eventType] then
+        SyncedPings[eventType] = {}
+        events[eventType]:register(function()
+            for i, sPing in ipairs(SyncedPings[eventType]) do
+                if world.getTime() % (SyncedPings.ticks + (i - 1)) == 0 then
+                    sPing.pingFunc(sPing.args)
+                end
+            end
+        end, "SyncedPings." .. eventType)
+    end
+    table.insert(SyncedPings[eventType], self)
     return function(...)
         self.args = ...
         self.pingFunc(...)
     end
 end
-
-events.WORLD_TICK:register(function()
-    for i, sPing in ipairs(SyncedPings.ALL) do
-        if world.getTime() % (SyncedPings.ticks + i) == 0 then
-            sPing.pingFunc(sPing.args)
-        end
-    end
-end, "SyncedPings")
 
 return SyncedPings
