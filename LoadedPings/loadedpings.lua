@@ -3,7 +3,6 @@ local loadedPings = {}
 local _loadedPings = {}
 
 setmetatable(loadedPings, {
-    __index = _loadedPings,
     __newindex = function(_, index, value)
         pings[index] = value
         local function func(...)
@@ -11,7 +10,7 @@ setmetatable(loadedPings, {
                 pings[index](...)
             end
         end
-        tbl[index] = func
+        rawset(_loadedPings, #_loadedPings+1, func)
     end
 })
 
