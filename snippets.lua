@@ -33,8 +33,8 @@ if host:isHost() then
     local leftItem = leftItemPart:newItem("leftItem")
 
     -- Set the scale to what you want!
-    rightItemPart:setScale(0, 0, 0)
-    leftItemPart:setScale(0, 0, 0)
+    rightItemPart:setScale(1, 1, 1)
+    leftItemPart:setScale(1, 1, 1)
 
     -- Position and Rotation can be done in code, or through moving ItemRight and ItemLeft in BlockBench.
     rightItemPart:setPos(0, 0, 0)
