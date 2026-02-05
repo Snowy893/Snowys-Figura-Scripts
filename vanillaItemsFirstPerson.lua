@@ -1,28 +1,4 @@
------------------------------------------------------------------------------
-
----Offset charged crossbow crouching rotation (fix when the crossbow points downward when you crouch!)
-
----@param itemStack ItemStack
----@return boolean
-local function crossbowCharged(itemStack)
-    local projectiles = itemStack:getTag().ChargedProjectiles
-    return projectiles ~= nil and next(projectiles) ~= nil
-end
-
-function events.tick()
-    local leftHanded = player:isLeftHanded()
-    local rightItem = player:getHeldItem(leftHanded)
-    local leftItem = player:getHeldItem(not leftHanded)
-    local crouching = player:isCrouching()
-    local charged = crossbowCharged(rightItem) or crossbowCharged(leftItem)
-
-    local armRot = (crouching and charged) and 20 or nil
-    vanilla_model.RIGHT_ARM:setOffsetRot(armRot)
-    vanilla_model.LEFT_ARM:setOffsetRot(armRot)
-end
-
------------------------------------------------------------------------------
-
+-- This is a snippet! Copy and paste it into your script!
 -- Manipulate vanilla items in first person!
 --[[
     Make sure that:
@@ -83,18 +59,16 @@ if host:isHost() then
     -- Position and Rotation can be done in code or through moving Item in BlockBench.
     itemPart:setPos(0, 0, 0)
     itemPart:setRot(0, 0, 0)
-    
+
     function events.item_render(item, mode, pos, rot, scale, lefthanded)
         local isFirstPerson = mode:find("FIRST_PERSON")
         if not isFirstPerson then return end
-        
+
         local displayMode = lefthanded and "FIRST_PERSON_LEFT_HAND" or "FIRST_PERSON_RIGHT_HAND"
-        
+
         itemTask:setDisplayMode(displayMode)
         itemTask:setItem(item)
-        
+
         return itemPart
     end
 end
-
------------------------------------------------------------------------------
