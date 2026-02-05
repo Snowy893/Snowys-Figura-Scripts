@@ -24,13 +24,21 @@ end
 -----------------------------------------------------------------------------
 
 -- Manipulate vanilla items in first person!
--- (Make sure you have a part called ItemRight and a part called ItemLeft in your model and that they are both at position 0,0,0)
+--[[
+    Make sure that:
+    - You have a group called ItemRight and a group called ItemLeft in your model, both at position 0,0,0, and outside of your root folder (if applicable)
+    - Each group has a cube with an invisible texture or with all faces removed (This is the only way block items work!)
+]]
 
 if host:isHost() then
     local rightItemPart = models.model.ItemRight
     local leftItemPart = models.model.ItemLeft
-    local rightItem = rightItemPart:newItem("rightItem")
-    local leftItem = leftItemPart:newItem("leftItem")
+    local rightItem = rightItemPart:newItem("rightItem"):setDisplayMode("FIRST_PERSON_RIGHT_HAND")
+    local leftItem = leftItemPart:newItem("leftItem"):setDisplayMode("FIRST_PERSON_LEFT_HAND")
+    
+    -- Must be flipped because by default they're backwards.
+    rightItemPart:setRot(0, 180, 0)
+    leftItemPart:setRot(0, 180, 0)
 
     -- Set the scale to what you want!
     rightItemPart:setScale(1, 1, 1)
@@ -44,8 +52,7 @@ if host:isHost() then
 
     function events.item_render(item, mode, pos, rot, scale, lefthanded)
         local isFirstPerson = mode:find("FIRST_PERSON")
-        local isItem = item.id == "minecraft:grass_block" -- This can be any check you want!
-        if not isFirstPerson or not isItem then return end
+        if not isFirstPerson then return end
 
         local part
         if lefthanded then
@@ -56,6 +63,40 @@ if host:isHost() then
             part = rightItemPart
         end
         return part
+    end
+end
+
+-- (Version without left and right distinction) Manipulate vanilla items in first person!
+--[[
+    Make sure that:
+    - You have a group called Item in your model at position 0,0,0, and outside of your root folder (if applicable)
+    - The group has a cube with an invisible texture or with all faces removed (This is the only way block items work!)
+]]
+
+if host:isHost() then
+    local itemPart = models.model.Item
+    local itemTask = itemPart:newItem("item")
+
+    -- Must be flipped because by default it's backwards.
+    itemPart:setRot(0, 180, 0)
+
+    -- Set the scale to what you want!
+    itemPart:setScale(1, 1, 1)
+
+    -- Position and Rotation can be done in code or through moving Item in BlockBench.
+    itemPart:setPos(0, 0, 0)
+    itemPart:setRot(0, 0, 0)
+    
+    function events.item_render(item, mode, pos, rot, scale, lefthanded)
+        local isFirstPerson = mode:find("FIRST_PERSON")
+        if not isFirstPerson then return end
+        
+        local displayMode = lefthanded and "FIRST_PERSON_LEFT_HAND" or "FIRST_PERSON_RIGHT_HAND"
+        
+        itemTask:setDisplayMode(displayMode)
+        itemTask:setItem(item)
+        
+        return itemPart
     end
 end
 
