@@ -32,6 +32,16 @@ if host:isHost() then
     local rightItem = rightItemPart:newItem("rightItem")
     local leftItem = leftItemPart:newItem("leftItem")
 
+    -- Set the scale to what you want!
+    rightItemPart:setScale(0, 0, 0)
+    leftItemPart:setScale(0, 0, 0)
+
+    -- Position and Rotation can be done in code, or through moving ItemRight and ItemLeft in BlockBench.
+    rightItemPart:setPos(0, 0, 0)
+    leftItemPart:setPos(0, 0, 0)
+    rightItemPart:setRot(0, 0, 0)
+    leftItemPart:setRot(0, 0, 0)
+
     function events.item_render(item, mode, pos, rot, scale, lefthanded)
         local isFirstPerson = mode:find("FIRST_PERSON")
         local isItem = item.id == "minecraft:grass_block" -- This can be any check you want!
