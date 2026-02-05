@@ -33,12 +33,12 @@ end
 if host:isHost() then
     local rightItemPart = models.model.ItemRight
     local leftItemPart = models.model.ItemLeft
-    local rightItem = rightItemPart:newItem("rightItem"):setDisplayMode("FIRST_PERSON_RIGHT_HAND")
-    local leftItem = leftItemPart:newItem("leftItem"):setDisplayMode("FIRST_PERSON_LEFT_HAND")
-    
-    -- Must be flipped because by default they're backwards.
-    rightItemPart:setRot(0, 180, 0)
-    leftItemPart:setRot(0, 180, 0)
+    local rightItem = rightItemPart:newItem("rightItem")
+        :setDisplayMode("FIRST_PERSON_RIGHT_HAND")
+        :setRot(0, 180, 0)
+    local leftItem = leftItemPart:newItem("leftItem")
+        :setDisplayMode("FIRST_PERSON_LEFT_HAND")
+        :setRot(0, 180, 0)
 
     -- Set the scale to what you want!
     rightItemPart:setScale(1, 1, 1)
@@ -75,10 +75,7 @@ end
 
 if host:isHost() then
     local itemPart = models.model.Item
-    local itemTask = itemPart:newItem("item")
-
-    -- Must be flipped because by default it's backwards.
-    itemPart:setRot(0, 180, 0)
+    local itemTask = itemPart:newItem("item"):setRot(0, 180, 0)
 
     -- Set the scale to what you want!
     itemPart:setScale(1, 1, 1)
