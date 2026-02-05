@@ -22,3 +22,31 @@ function events.tick()
 end
 
 -----------------------------------------------------------------------------
+
+-- Manipulate vanilla items in first person!
+-- (Make sure you have a part called ItemRight and a part called ItemLeft in your model and that they are both at position 0,0,0)
+
+if host:isHost() then
+    local rightItemPart = models.model.ItemRight
+    local leftItemPart = models.model.ItemLeft
+    local rightItem = rightItemPart:newItem("rightItem")
+    local leftItem = leftItemPart:newItem("leftItem")
+
+    function events.item_render(item, mode, pos, rot, scale, lefthanded)
+        local isFirstPerson = mode:find("FIRST_PERSON")
+        local isItem = item.id == "minecraft:grass_block" -- This can be any check you want!
+        if not isFirstPerson or not isItem then return end
+
+        local part
+        if lefthanded then
+            leftItem:setItem(item)
+            part = leftItemPart
+        else
+            rightItem:setItem(item)
+            part = rightItemPart
+        end
+        return part
+    end
+end
+
+-----------------------------------------------------------------------------
