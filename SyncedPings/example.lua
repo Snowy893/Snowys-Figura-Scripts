@@ -8,7 +8,7 @@ function pings.myPing(state)
     log(state)
 end
 
-local mySyncedPing = syncedPings:new(pings.myPing, true)
+local mySyncedPing = syncedPings:new(pings.myPing, "TICK", true)
 
 page:newAction()
     :title("Action")
