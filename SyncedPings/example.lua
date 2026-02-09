@@ -17,4 +17,4 @@ page:newAction()
 -- passing it directly is also an option!
 page:newAction()
     :title("Action")
-    :onToggle(syncedPings:new(pings.myPing, true))
+    :onToggle(syncedPings:new(pings.myPing, "TICK", true))
