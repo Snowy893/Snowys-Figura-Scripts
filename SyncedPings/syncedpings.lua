@@ -8,6 +8,10 @@ SyncedPings.ticks = 200
 ---@param ... T?
 ---@return fun(...: T?)
 function SyncedPings:new(pingFunc, eventType, ...)
+    if not host:isHost() then return function() end end
+    if eventType ~= "TICK" and eventType ~= "WORLD_TICK" then
+        error("Unexpected event type: \""..tostring(eventType).."\" (Should be either \"TICK\" or \"WORLD_TICK\"!)")
+    end
     self.pingFunc = pingFunc
     self.args = ...
     if not SyncedPings[eventType] then
