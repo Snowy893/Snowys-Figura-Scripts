@@ -64,9 +64,7 @@ if host:isHost() then
         local isFirstPerson = mode:find("FIRST_PERSON")
         if not isFirstPerson then return end
 
-        local displayMode = lefthanded and "FIRST_PERSON_LEFT_HAND" or "FIRST_PERSON_RIGHT_HAND"
-
-        itemTask:setDisplayMode(displayMode)
+        itemTask:setDisplayMode(mode)
         itemTask:setItem(item)
 
         return itemPart
