@@ -30,6 +30,7 @@ end
     - Each group has a cube with an invisible texture or with all faces removed (This is the only way block items work!)
 ]]
 
+-- First person stuff can be host only!
 if host:isHost() then
     local rightItemPart = models.model.ItemRight
     local leftItemPart = models.model.ItemLeft
@@ -73,6 +74,7 @@ end
     - The group has a cube with an invisible texture or with all faces removed (This is the only way block items work!)
 ]]
 
+-- First person stuff can be host only!
 if host:isHost() then
     local itemPart = models.model.Item
     local itemTask = itemPart:newItem("item"):setRot(0, 180, 0)
