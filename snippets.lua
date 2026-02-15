@@ -1,3 +1,5 @@
+---------------------------------------------------------------------
+
 -- This is a snippet! Copy and paste it into your script!
 -- Offset charged crossbow crouching rotation. (fix when the crossbow points downward when you crouch)
 
@@ -45,7 +47,7 @@ if host:isHost() then
     rightItemPart:setScale(1, 1, 1)
     leftItemPart:setScale(1, 1, 1)
 
-    -- Position and Rotation can be done in code, or through moving ItemRight and ItemLeft in BlockBench.
+    -- Position and Rotation can be done in code, or through moving ItemRight and ItemLeft in Blockbench.
     rightItemPart:setPos(0, 0, 0)
     leftItemPart:setPos(0, 0, 0)
     rightItemPart:setRot(0, 0, 0)
@@ -82,7 +84,7 @@ if host:isHost() then
     -- Set the scale to what you want!
     itemPart:setScale(1, 1, 1)
 
-    -- Position and Rotation can be done in code or through moving Item in BlockBench.
+    -- Position and Rotation can be done in code or through moving Item in Blockbench.
     itemPart:setPos(0, 0, 0)
     itemPart:setRot(0, 0, 0)
 
@@ -95,4 +97,60 @@ if host:isHost() then
 
         return itemPart
     end
+end
+
+---------------------------------------------------------------------
+
+-- Make yourself emit particles!
+-- (combined with this snippet: https://discord.com/channels/1129805506354085959/1234218592187453452/1457850741212450928)
+local particle = "minecraft:portal"
+local offset = vec(0, 1, 0) -- the center from where the particles spawn, offset from the player position
+local rate = 25 -- particles per second
+local radius = 1 -- max distance from the player
+local vel = 1 -- velocity
+
+local countLeft = 0
+function events.tick()
+    countLeft = countLeft + rate / 20
+    while countLeft > 0 do
+        countLeft = countLeft - 1
+        local pos = player:getPos():add(offset)
+            :add(
+                math.lerp(-radius, radius, math.random()),
+                math.lerp(-radius, radius, math.random()),
+                math.lerp(-radius, radius, math.random())
+            )
+        particles:newParticle(particle, pos, vec(
+            math.lerp(-vel, vel, math.random()),
+            math.lerp(-vel, vel, math.random()),
+            math.lerp(-vel, vel, math.random())
+        ))
+    end
+end
+
+-- Alternate version for custom color:
+local rgba = vec(50, 50, 50, 255) -- red, green, blue, alpha here (0-255)
+local offset = vec(0, 1, 0) -- the center from where the particles spawn, offset from the player position
+local rate = 25 -- particles per second
+local radius = 2 -- max distance from the player
+local vel = 1 -- velocity
+
+local countLeft = 0
+local particle = "dust "..tostring(rgba.x / 255).." "..tostring(rgba.y / 255).." "..tostring(rgba.z / 255).." "..tostring(rgba.w / 255)
+function events.tick()
+	countLeft = countLeft + rate / 20
+	while countLeft > 0 do
+		countLeft = countLeft - 1
+		local pos = player:getPos():add(offset)
+			:add(
+				math.lerp(-radius, radius, math.random()),
+				math.lerp(-radius, radius, math.random()),
+				math.lerp(-radius, radius, math.random())
+			)
+		particles:newParticle(particle, pos, vec(
+			math.lerp(-vel, vel, math.random()),
+			math.lerp(-vel, vel, math.random()),
+			math.lerp(-vel, vel, math.random())
+		))
+	end
 end
