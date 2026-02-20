@@ -8,7 +8,7 @@ function pings.myPing(state)
     log(state)
 end
 
-local mySyncedPing = syncedpings:new(pings.myPing, true)
+local mySyncedPing = syncedpings:new(pings.myPing, false)
 
 page:newAction()
     :title("Action")
@@ -17,4 +17,4 @@ page:newAction()
 -- passing it directly is also an option!
 page:newAction()
     :title("Action")
-    :onToggle(syncedpings:new(pings.myPing, true))
+    :onToggle(syncedpings:new(pings.myPing, false))
