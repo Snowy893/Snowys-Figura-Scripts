@@ -102,45 +102,26 @@ end
 --[[
     Make sure that:
     - You have a group called ItemShieldFix in your model at position 0,0,0, and outside of your root folder
-    - The group has a cube with an invisible texture
+    - The group has a cube with an invisible texture (certain items won't work without this, including the shield!)
 ]]
 
 -- First person stuff can be host only!
 if host:isHost() then
-    -- Config option to toggle the fix, on by default
-    local fixShield = config:load("shouldFixShield") or true
-
-    -- Can be replaced with your action wheel!
-    local page = action_wheel:newPage()
-
-    -- Action to toggle the fix
-    page:newAction()
-        :title("Fix Shield")
-        :item("minecraft:shield")
-        :toggled(true)
-        :onToggle(function(toggle)
-            fixShield = toggle
-            config:save("shouldFixShield", toggle)
-        end)
-
     local shieldPart = models.model.ItemShieldFix
     local shieldTask = shieldPart:newItem("shield")
         :setDisplayMode("FIRST_PERSON_RIGHT_HAND")
         :setRot(0, 180, 0)
 
-    function events.entity_init()
-        function events.item_render(item, mode, pos, rot, scale, lefthanded)
-            if not fixShield or lefthanded or not mode:find("FIRST_PERSON") or item:getUseAction() ~= "BLOCK" then return end
+    function events.item_render(item, mode, pos, rot, scale, lefthanded)
+        if lefthanded or not mode:find("FIRST_PERSON") or item:getUseAction() ~= "BLOCK" then return end
 
-            local blocking = player:isUsingItem()
+        local blocking = player:isLoaded() and player:isUsingItem()
+        local offset = blocking and -1.742 or -0.257
 
-            local offset = blocking and -1.742 or -0.257
+        shieldTask:setPos(0, offset, 0)
+        shieldTask:setItem(item)
 
-            shieldTask:setPos(0, offset, 0)
-            shieldTask:setItem(item)
-
-            return shieldPart
-        end
+        return shieldPart
     end
 end
 
