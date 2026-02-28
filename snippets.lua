@@ -28,8 +28,8 @@ end
 -- Manipulate vanilla items in first person.
 --[[
     Make sure that:
-    - You have a group called ItemRight and a group called ItemLeft in your model, both at position 0,0,0, and outside of your root folder (if applicable)
-    - Each group has a cube with an invisible texture or with all faces removed (This is the only way block items work!)
+    - You have a group called ItemRight and a group called ItemLeft in your model, both at position 0,0,0, and outside of your root folder
+    - Each group has a cube with an invisible texture (This is the only way certain items work!)
 ]]
 
 -- First person stuff can be host only!
@@ -54,26 +54,23 @@ if host:isHost() then
     leftItemPart:setRot(0, 0, 0)
 
     function events.item_render(item, mode, pos, rot, scale, lefthanded)
-        local isFirstPerson = mode:find("FIRST_PERSON")
-        if not isFirstPerson then return end
+        if not mode:find("FIRST_PERSON") then return end
 
-        local part
-        if lefthanded then
-            leftItem:setItem(item)
-            part = leftItemPart
-        else
-            rightItem:setItem(item)
-            part = rightItemPart
-        end
+        local task = lefthanded and leftItem or rightItem
+        local part = lefthanded and leftItemPart or rightItemPart
+
+        task:setItem(item)
+
         return part
     end
 end
 
+-- This is a snippet! Copy and paste it into your script!
 -- (Version without left and right distinction) Manipulate vanilla items in first person!
 --[[
     Make sure that:
-    - You have a group called Item in your model at position 0,0,0, and outside of your root folder (if applicable)
-    - The group has a cube with an invisible texture or with all faces removed (This is the only way block items work!)
+    - You have a group called Item in your model at position 0,0,0, and outside of your root folder
+    - The group has a cube with an invisible texture (This is the only way certain items work!)
 ]]
 
 -- First person stuff can be host only!
@@ -89,8 +86,7 @@ if host:isHost() then
     itemPart:setRot(0, 0, 0)
 
     function events.item_render(item, mode, pos, rot, scale, lefthanded)
-        local isFirstPerson = mode:find("FIRST_PERSON")
-        if not isFirstPerson then return end
+        if not mode:find("FIRST_PERSON") then return end
 
         itemTask:setDisplayMode(mode)
         itemTask:setItem(item)
