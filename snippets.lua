@@ -97,6 +97,55 @@ end
 
 ---------------------------------------------------------------------
 
+-- This is a snippet! Copy and paste it into your script!
+-- Fixes the bug with your shield being too high in your right hand
+--[[
+    Make sure that:
+    - You have a group called ItemShieldFix in your model at position 0,0,0, and outside of your root folder
+    - The group has a cube with an invisible texture
+]]
+
+-- First person stuff can be host only!
+if host:isHost() then
+    -- Config option to toggle the fix, on by default
+    local fixShield = config:load("shouldFixShield") or true
+
+    -- Can be replaced with your action wheel!
+    local page = action_wheel:newPage()
+
+    -- Action to toggle the fix
+    page:newAction()
+        :title("Fix Shield")
+        :item("minecraft:shield")
+        :toggled(true)
+        :onToggle(function(toggle)
+            fixShield = toggle
+            config:save("shouldFixShield", toggle)
+        end)
+
+    local shieldPart = models.model.ItemShieldFix
+    local shieldTask = shieldPart:newItem("shield")
+        :setDisplayMode("FIRST_PERSON_RIGHT_HAND")
+        :setRot(0, 180, 0)
+
+    function events.entity_init()
+        function events.item_render(item, mode, pos, rot, scale, lefthanded)
+            if not fixShield or lefthanded or not mode:find("FIRST_PERSON") or item:getUseAction() ~= "BLOCK" then return end
+
+            local blocking = player:isUsingItem()
+
+            local offset = blocking and -1.742 or -0.257
+
+            shieldTask:setPos(0, offset, 0)
+            shieldTask:setItem(item)
+
+            return shieldPart
+        end
+    end
+end
+
+---------------------------------------------------------------------
+
 -- Make yourself emit particles!
 -- (combined with this snippet: https://discord.com/channels/1129805506354085959/1234218592187453452/1457850741212450928)
 local particle = "minecraft:portal"
