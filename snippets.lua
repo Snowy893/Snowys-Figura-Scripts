@@ -127,6 +127,7 @@ end
 
 ---------------------------------------------------------------------
 
+-- This is a snippet! Copy and paste it into your script!
 -- Make yourself emit particles!
 -- (combined with this snippet: https://discord.com/channels/1129805506354085959/1234218592187453452/1457850741212450928)
 local particle = "minecraft:portal"
@@ -155,7 +156,7 @@ function events.tick()
 end
 
 -- Alternate version for custom color:
-local rgba = vec(50, 50, 50, 255) -- red, green, blue, alpha here (0-255)
+local rgba = vec(50, 50, 50, 255) -- red, green, blue, alpha (0-255)
 local offset = vec(0, 1, 0) -- the center from where the particles spawn, offset from the player position
 local rate = 25 -- particles per second
 local radius = 2 -- max distance from the player
@@ -164,19 +165,47 @@ local vel = 1 -- velocity
 local countLeft = 0
 local particle = "dust "..tostring(rgba.x / 255).." "..tostring(rgba.y / 255).." "..tostring(rgba.z / 255).." "..tostring(rgba.w / 255)
 function events.tick()
-	countLeft = countLeft + rate / 20
-	while countLeft > 0 do
-		countLeft = countLeft - 1
-		local pos = player:getPos():add(offset)
-			:add(
-				math.lerp(-radius, radius, math.random()),
-				math.lerp(-radius, radius, math.random()),
-				math.lerp(-radius, radius, math.random())
-			)
-		particles:newParticle(particle, pos, vec(
-			math.lerp(-vel, vel, math.random()),
-			math.lerp(-vel, vel, math.random()),
-			math.lerp(-vel, vel, math.random())
-		))
-	end
+    countLeft = countLeft + rate / 20
+    while countLeft > 0 do
+        countLeft = countLeft - 1
+        local pos = player:getPos():add(offset)
+            :add(
+                math.lerp(-radius, radius, math.random()),
+                math.lerp(-radius, radius, math.random()),
+                math.lerp(-radius, radius, math.random())
+            )
+        particles:newParticle(particle, pos, vec(
+            math.lerp(-vel, vel, math.random()),
+            math.lerp(-vel, vel, math.random()),
+            math.lerp(-vel, vel, math.random())
+        ))
+    end
+end
+
+---------------------------------------------------------------------
+
+-- Make effect ids work on any version!
+-- Effect ids are inconsistent depending on the version:
+-- Before 1.20.5 -> "effect.<namespace>.<name>" (e.g., "effect.minecraft.speed")
+-- On and After 1.20.5 -> "<namespace>:<name>" (e.g., "minecraft:speed")
+
+---This function will format an effect ID as "effect.\<namespace>.\<name>", regardless of the version!
+---@param effect Minecraft.effectID
+---@return Minecraft.effectID
+local function getEffect(effect)
+    local id = effect
+    if effect:find(":") then
+        local namespace, name = string.match(effect, "(.*)%:(.*)")
+        id = "effect."..namespace.."."..name
+    end
+    return id
+end
+
+-- Example:
+function events.tick()
+    for _, effect in ipairs(host:getStatusEffects()) do
+        if getEffect(effect.name) == "effect.minecraft.speed" then
+            --do stuff
+        end
+    end
 end
