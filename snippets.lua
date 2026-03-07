@@ -1,5 +1,3 @@
----------------------------------------------------------------------
-
 -- This is a snippet! Copy and paste it into your script!
 -- Offset charged crossbow crouching rotation. (fix when the crossbow points downward when you crouch)
 
@@ -155,7 +153,8 @@ function events.tick()
     end
 end
 
--- Alternate version for custom color:
+-- This is a snippet! Copy and paste it into your script!
+-- Make yourself emit particles! (Alternate version with custom color)
 local rgba = vec(50, 50, 50, 255) -- red, green, blue, alpha (0-255)
 local offset = vec(0, 1, 0) -- the center from where the particles spawn, offset from the player position
 local rate = 25 -- particles per second
@@ -189,7 +188,7 @@ end
 -- Before 1.20.5 -> "effect.<namespace>.<name>" (e.g., "effect.minecraft.speed")
 -- On and After 1.20.5 -> "<namespace>:<name>" (e.g., "minecraft:speed")
 
----This function will format an effect ID as "effect.\<namespace>.\<name>", regardless of the version!
+---This function will format an effect ID as `"effect.<namespace>.<name>"`, regardless of the version!
 ---@param effect Minecraft.effectID
 ---@return Minecraft.effectID
 local function getEffect(effect)
@@ -209,3 +208,24 @@ function events.tick()
         end
     end
 end
+
+---------------------------------------------------------------------
+
+-- A version of [this snippet](https://discord.com/channels/1129805506354085959/1234218592187453452/1479917013278396418)
+-- that works with any capitalization.
+local facing = setmetatable({
+	north = vec(0, 0, 1),
+	east = vec(1, 0, 0),
+	south = vec(0, 0, -1),
+	west = vec(-1, 0, 0),
+	up = vec(0, 1, 0),
+	down = vec(0, -1, 0),
+}, {
+	__index = function(self, index)
+		return rawget(self, index:lower())
+	end
+})
+
+-- facing.north vec(0, 0, 1)
+-- facing.NORTH vec(0, 0, 1)
+-- facing.nOrTh vec(0, 0, 1)
