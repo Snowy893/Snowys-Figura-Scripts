@@ -1,15 +1,15 @@
-local curioslib = require "curioslib"
+local curiosapi = require "curiosapiapi"
 
 function events.tick()
     -- Gets the "necklace" slot
-    local necklace = curioslib.getSlot("necklace")
+    local necklace = curiosapi.getSlot("necklace")
     -- If the necklace slot exists and if something is being visibly worn in it
     if necklace and necklace.visible then
         log("Wearing a necklace!")
     end
 
     -- If you want to get multiple slots, it's more efficient to get the whole inventory
-    local curiosInv = curioslib.getInventory()
+    local curiosInv = curiosapi.getInventory()
     -- Check if the curios inventory has been retrieved
     if curiosInv then
         local back = curiosInv.back -- Gets the "back" slot
@@ -44,7 +44,7 @@ function events.tick()
     local target = player:getTargetedEntity(10)
     if target then
         -- Get the target's curios inventory
-        local targetCuriosInv = curioslib.getInventory(target)
+        local targetCuriosInv = curiosapi.getInventory(target)
         -- Get hands slot if targetCuriosInv exists
         local hands = targetCuriosInv and targetCuriosInv.hands
 
